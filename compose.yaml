@@ -1,0 +1,13 @@
+
+services:
+  go-learn:
+    container_name: go-learn
+    entrypoint: tail -f /dev/null
+    image: golang:1.20.3-bullseye
+    volumes:
+     - ./:/go/src/go-learn
+     - go-pkg:/go/pkg
+     - go-pkg:/go/bin
+
+volumes:
+ go-pkg: 
