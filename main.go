@@ -1,13 +1,16 @@
 package main
 
 import (
+	"math/rand"
 	"fmt"
 )
 
 func main() {
 	fmt.Println("test")
-	t := Terrain(TERRAIN_GRASS)
-	fmt.Println(t)
+	world := NewWorld(10, 10)
+	cost := world.getTile(2, 3).GetMoveCost()
+	fmt.Println(world.tiles)
+	fmt.Println(cost)
 }
 
 type TreeModel struct {
@@ -25,53 +28,119 @@ type Tree struct {
 	leafTint  string
 }
 
-type Terrain int
+type Texture int
 
 const (
-	TERRAIN_GRASS Terrain = iota
-	TERRAIN_HILL
-	TERRAIN_RIVER
+	GRASS_TEXTURE Texture = iota
+	HILL_TEXTURE
+	RIVER_TEXTURE
 )
 
-func (t Terrain) String() string {
+func (t Texture) String() string {
 	switch t {
-	case TERRAIN_GRASS:
-		return "TERRAIN_GRASS"
-	case TERRAIN_HILL:
-		return "TERRAIN_HILL"
-	case TERRAIN_RIVER:
-		return "TERRAIN_RIVER"
+	case GRASS_TEXTURE:
+		return "GRASS_TEXTURE"
+	case HILL_TEXTURE:
+		return "HILL_TEXTURE"
+	case RIVER_TEXTURE:
+		return "RIVER_TEXTURE"
 	default:
 		return "Unknown"
 	}
 }
 
+type Terrain struct {
+	moveCost int
+	isWater bool
+	texture Texture
+}
+
+func NewTerrain(moveCost int, isWater bool, texture Texture) Terrain {
+	return Terrain{
+		moveCost: moveCost,
+		isWater: isWater,
+		texture: texture,
+	}
+}
+
+func (t Terrain) GetMoveCost() int {
+	return t.moveCost
+}
+
+func (t Terrain) IsWater() bool {
+	return t.isWater
+}
+
+func (t Terrain) GetTexture() Texture {
+	return t.texture
+}
+
 type World struct {
-	tiles Terrain
+	tiles [][]*Terrain
+	width int
+	height int
+	grassTerrain Terrain
+	hillTerrain Terrain
+	riverTerrain Terrain
 }
 
-func (w World) getMovementCost(x int) int {
-	switch x {
-	case int(TERRAIN_GRASS):
-		return 1
-	case int(TERRAIN_HILL):
-		return 2
-	case int(TERRAIN_RIVER):
-		return 3
-	default:
-		return 1
+func NewWorld(width, height int) World {
+	tiles := make([][]*Terrain, width)
+	for i := 0; i < width; i++ {
+		tiles[i] = make([]*Terrain, height)
+	}
+	w := World{
+		tiles: tiles,
+		width: width,
+		height: height,
+		grassTerrain: NewTerrain(1, false, GRASS_TEXTURE),
+		hillTerrain: NewTerrain(3, false, HILL_TEXTURE),
+		riverTerrain: NewTerrain(2, true, RIVER_TEXTURE),
+	}
+	w.generateTerrain()
+	return w
+}
+
+func (w World) generateTerrain() {
+	for x := 0; x < w.width; x++ {
+		for y := 0; y < w.height; y++ {
+			w.tiles[x][y] = &w.grassTerrain
+		}
+	}
+
+	x := rand.Intn(w.width)
+	for y := 0; y < w.height; y++ {
+		w.tiles[x][y] = &w.riverTerrain
 	}
 }
 
-func (w World) isWater(x int) bool {
-	switch x {
-	case int(TERRAIN_GRASS):
-		return false
-	case int(TERRAIN_HILL):
-		return false
-	case int(TERRAIN_RIVER):
-		return true
-	default:
-		return false
-	}
+func (w World) getTile(x, y int) *Terrain{
+	return w.tiles[x][y]
 }
+
+
+// func (w World) getMovementCost(x int) int {
+// 	switch x {
+// 	case int(TERRAIN_GRASS):
+// 		return 1
+// 	case int(TERRAIN_HILL):
+// 		return 2
+// 	case int(TERRAIN_RIVER):
+// 		return 3
+// 	default:
+// 		return 1
+// 	}
+// }
+
+// func (w World) isWater(x int) bool {
+// 	switch x {
+// 	case int(TERRAIN_GRASS):
+// 		return false
+// 	case int(TERRAIN_HILL):
+// 		return false
+// 	case int(TERRAIN_RIVER):
+// 		return true
+// 	default:
+// 		return false
+// 	}
+// }
