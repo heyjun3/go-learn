@@ -144,3 +144,41 @@ func (w World) getTile(x, y int) *Terrain{
 // 		return false
 // 	}
 // }
+
+type Entity struct {}
+
+type Observer interface {
+	OnNotify(entity *Entity, event string)
+}
+
+type Achivements struct {
+	heroIsOnBridge bool
+}
+
+func (a Achivements) OnNotify(entity *Entity, event string) {
+	switch event {
+	case "EVENT_ENTITY_FELL":
+		a.unclock("ACHEVEMENT_FELL_OFF_BRIDGE")
+	default:
+		break
+	}
+}
+
+func (a Achivements) unclock(event string) {
+	fmt.Println(event)
+}
+
+type Subject struct {
+	observers []Observer
+}
+
+func (s *Subject) addObserver(observer Observer) {
+	s.observers = append(s.observers, observer)
+}
+
+func (s Subject) notify(entity *Entity, event string) {
+	for _, ob := range s.observers {
+		ob.OnNotify(entity, event)
+	}
+}
+
