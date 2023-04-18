@@ -182,3 +182,52 @@ func (s Subject) notify(entity *Entity, event string) {
 	}
 }
 
+type Monster interface {
+	clone() Monster
+}
+
+type Ghost struct {
+	health int
+	speed int
+}
+
+func NewGhost(health, speed int) *Ghost {
+	return &Ghost{
+		health: health,
+		speed: speed,
+	}
+}
+
+func (g Ghost) clone() Monster {
+	return g
+}
+
+type Demon struct {
+	Monster
+}
+
+type Sorcerer struct {
+	Monster
+}
+
+// type Spawner interface {
+// 	spawnMonster() *Monster
+// }
+
+// type GhostSpawner struct {}
+
+// func (g GhostSpawner) spawnMonster() *Ghost {
+// 	return &Ghost{}
+// }
+
+type Spawner struct {
+	prototype Monster
+}
+
+func NewSpawner(prototype Monster) Spawner {
+	return Spawner{prototype: prototype}
+}
+
+func (s Spawner) spawnMonster() Monster {
+	return s.prototype.clone()
+}
