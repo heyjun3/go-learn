@@ -231,3 +231,33 @@ func NewSpawner(prototype Monster) Spawner {
 func (s Spawner) spawnMonster() Monster {
 	return s.prototype.clone()
 }
+
+// type FileSystem struct {
+// 	instance *FileSystem
+// }
+
+// func (f FileSystem) instance() {
+// 	if (f.instance == nil) {
+// 		f.instance = &FileSystem{}
+// 	}
+// }
+
+type Bullet struct {
+	x int
+	y int
+}
+
+func NewBullet(x, y int) *Bullet{
+	return &Bullet{
+		x: x,
+		y: y,
+	}
+}
+
+func (b Bullet) isOnScreen() bool {
+	return b.x >= 0 && b.y >= 0
+}
+
+func (b *Bullet) move(){
+	b.x += 5
+}
