@@ -12,7 +12,9 @@ import (
 	hellopb "go-learn/pkg/grpc"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/credentials/insecure"
+	_ "google.golang.org/genproto/googleapis/rpc/errdetails"
 )
 
 var (
@@ -76,7 +78,13 @@ func Hello() {
 	}
 	res, err := client.Hello(context.Background(), req)
 	if err != nil {
-		fmt.Println(err)
+		if stat, ok := status.FromError(err); ok {
+			fmt.Printf("code: %s\n", stat.Code())
+			fmt.Printf("message: %s\n", stat.Message())
+			fmt.Printf("details: %s\n", stat.Details())
+		} else {
+			fmt.Println(err)
+		}
 	} else {
 		fmt.Println(res.GetMessage())
 	}
@@ -145,7 +153,7 @@ func HelloBiStream() {
 	}
 	
 	sendNum := 5
-	fmt.Println("Please enter %d names. \n", sendNum)
+	fmt.Printf("Please enter %d names. \n", sendNum)
 
 	var sendEnd, recvEnd bool
 	sendCount := 0
