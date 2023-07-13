@@ -18,6 +18,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	hellopb "go-learn/pkg/grpc"
+	"go-learn/cmd/server/interceptor"
 )
 
 func main() {
@@ -27,7 +28,9 @@ func main() {
 		panic(err)
 	}
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(interceptor.MyUnaryServerInterceptor1),
+	)
 
 	hellopb.RegisterGreetingServiceServer(s, NewmyServer())
 
