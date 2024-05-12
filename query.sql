@@ -24,3 +24,14 @@ SELECT unnest(@ids::bigint[]) AS id,
   unnest(@names::text[]) AS name,
   unnest(@bios::text[]) AS bio
 ON CONFLICT (id) DO NOTHING;
+
+-- name: GetEmployees :many
+SELECT * FROM employee;
+
+-- name: CreateEmployee :one
+INSERT INTO employee (
+  name
+) VALUES (
+  $1
+)
+RETURNING *;

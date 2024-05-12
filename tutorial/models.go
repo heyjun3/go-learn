@@ -13,3 +13,7 @@ type Author struct {
 	Name string
 	Bio  sql.NullString
 }
+
+type Employee struct {
+	Name string
+}

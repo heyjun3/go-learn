@@ -52,6 +52,21 @@ func (q *Queries) CreateAuthors(ctx context.Context, arg CreateAuthorsParams) er
 	return err
 }
 
+const createEmployee = `-- name: CreateEmployee :one
+INSERT INTO employee (
+  name
+) VALUES (
+  $1
+)
+RETURNING name
+`
+
+func (q *Queries) CreateEmployee(ctx context.Context, name string) (string, error) {
+	row := q.db.QueryRowContext(ctx, createEmployee, name)
+	err := row.Scan(&name)
+	return name, err
+}
+
 const deleteAuthor = `-- name: DeleteAuthor :exec
 DELETE FROM authors
 WHERE id = $1
@@ -72,6 +87,33 @@ func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
 	var i Author
 	err := row.Scan(&i.ID, &i.Name, &i.Bio)
 	return i, err
+}
+
+const getEmployees = `-- name: GetEmployees :many
+SELECT name FROM employee
+`
+
+func (q *Queries) GetEmployees(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, getEmployees)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		items = append(items, name)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listAuthors = `-- name: ListAuthors :many
