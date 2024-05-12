@@ -22,4 +22,5 @@ WHERE id = $1;
 INSERT INTO authors
 SELECT unnest(@ids::bigint[]) AS id,
   unnest(@names::text[]) AS name,
-  unnest(@bios::text[]) AS bio;
+  unnest(@bios::text[]) AS bio
+ON CONFLICT (id) DO NOTHING;

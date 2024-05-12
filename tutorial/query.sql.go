@@ -38,6 +38,7 @@ INSERT INTO authors
 SELECT unnest($1::bigint[]) AS id,
   unnest($2::text[]) AS name,
   unnest($3::text[]) AS bio
+ON CONFLICT (id) DO NOTHING
 `
 
 type CreateAuthorsParams struct {
