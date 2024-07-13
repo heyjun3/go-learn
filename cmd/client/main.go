@@ -1,25 +1,25 @@
 package main
 
 import (
-	"errors"
-	"io"
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
 	hellopb "go-learn/pkg/grpc"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/status"
-	"google.golang.org/grpc/credentials/insecure"
 	_ "google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 var (
 	scanner *bufio.Scanner
-	client hellopb.GreetingServiceClient
+	client  hellopb.GreetingServiceClient
 )
 
 func main() {
@@ -151,7 +151,7 @@ func HelloBiStream() {
 		fmt.Println(err)
 		return
 	}
-	
+
 	sendNum := 5
 	fmt.Printf("Please enter %d names. \n", sendNum)
 

@@ -1,4 +1,4 @@
-package	interceptor
+package interceptor
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 
 	"google.golang.org/grpc"
 )
-
 
 func MyUnaryServerInterceptor1(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	log.Println("[pre] my unary server interceptor 1: ", info.FullMethod)

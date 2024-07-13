@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 )
+
 type TreeModel struct {
 	mesh  string
 	bark  string
@@ -42,15 +43,15 @@ func (t Texture) String() string {
 
 type Terrain struct {
 	moveCost int
-	isWater bool
-	texture Texture
+	isWater  bool
+	texture  Texture
 }
 
 func NewTerrain(moveCost int, isWater bool, texture Texture) Terrain {
 	return Terrain{
 		moveCost: moveCost,
-		isWater: isWater,
-		texture: texture,
+		isWater:  isWater,
+		texture:  texture,
 	}
 }
 
@@ -67,11 +68,11 @@ func (t Terrain) GetTexture() Texture {
 }
 
 type World struct {
-	tiles [][]*Terrain
-	width int
-	height int
+	tiles        [][]*Terrain
+	width        int
+	height       int
 	grassTerrain Terrain
-	hillTerrain Terrain
+	hillTerrain  Terrain
 	riverTerrain Terrain
 }
 
@@ -81,11 +82,11 @@ func NewWorld(width, height int) World {
 		tiles[i] = make([]*Terrain, height)
 	}
 	w := World{
-		tiles: tiles,
-		width: width,
-		height: height,
+		tiles:        tiles,
+		width:        width,
+		height:       height,
 		grassTerrain: NewTerrain(1, false, GRASS_TEXTURE),
-		hillTerrain: NewTerrain(3, false, HILL_TEXTURE),
+		hillTerrain:  NewTerrain(3, false, HILL_TEXTURE),
 		riverTerrain: NewTerrain(2, true, RIVER_TEXTURE),
 	}
 	w.generateTerrain()
@@ -105,10 +106,9 @@ func (w World) generateTerrain() {
 	}
 }
 
-func (w World) getTile(x, y int) *Terrain{
+func (w World) getTile(x, y int) *Terrain {
 	return w.tiles[x][y]
 }
-
 
 // func (w World) getMovementCost(x int) int {
 // 	switch x {
@@ -136,7 +136,7 @@ func (w World) getTile(x, y int) *Terrain{
 // 	}
 // }
 
-type Entity struct {}
+type Entity struct{}
 
 type Observer interface {
 	OnNotify(entity *Entity, event string)
@@ -179,13 +179,13 @@ type Monster interface {
 
 type Ghost struct {
 	health int
-	speed int
+	speed  int
 }
 
 func NewGhost(health, speed int) *Ghost {
 	return &Ghost{
 		health: health,
-		speed: speed,
+		speed:  speed,
 	}
 }
 
@@ -238,7 +238,7 @@ type Bullet struct {
 	y int
 }
 
-func NewBullet(x, y int) *Bullet{
+func NewBullet(x, y int) *Bullet {
 	return &Bullet{
 		x: x,
 		y: y,
@@ -249,6 +249,6 @@ func (b Bullet) isOnScreen() bool {
 	return b.x >= 0 && b.y >= 0
 }
 
-func (b *Bullet) move(){
+func (b *Bullet) move() {
 	b.x += 5
 }

@@ -17,8 +17,8 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	hellopb "go-learn/pkg/grpc"
 	"go-learn/cmd/server/interceptor"
+	hellopb "go-learn/pkg/grpc"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 		log.Printf("start gRPC server port: %d", port)
 		s.Serve(listener)
 	}()
-	
+
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit

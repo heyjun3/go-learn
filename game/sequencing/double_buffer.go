@@ -1,11 +1,10 @@
 package sequencing
 
-
 type Frame struct {
 	pixles []int
 }
 
-func NewFrame(size int) *Frame{
+func NewFrame(size int) *Frame {
 	return &Frame{
 		pixles: make([]int, size),
 	}
@@ -21,6 +20,6 @@ func (f *Frame) Draw(x int) {
 	f.pixles[x] = 1
 }
 
-func (f Frame) GetPixels() []int{
+func (f Frame) GetPixels() []int {
 	return f.pixles
 }
